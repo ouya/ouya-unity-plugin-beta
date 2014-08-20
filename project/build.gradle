@@ -1,0 +1,24 @@
+task unityPackage(dependsOn: ':java-plugin:build') {
+
+	def unityExecutable = project.hasProperty('unityExecutable') ?
+		project.property('unityExecutable') :
+		'/Applications/Unity/Unity.app/Contents/MacOS/Unity'
+
+	def logFile = file("$buildDir/unityPackage.log")
+	logFile.parentFile.mkdirs()
+
+	project.exec {
+		commandLine unityExecutable
+		args '-batchMode'
+		args '-quit'
+		args '-projectPath'
+		args file('.')
+		args '-exportPackage'
+		args 'Assets'
+		args file("$buildDir/ouya-unity-plugin.unityPackage")
+		args '-cleanedLogFile'
+		args logFile
+		args '-quit'
+	}
+	println logFile.text
+}
