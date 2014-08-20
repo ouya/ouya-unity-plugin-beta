@@ -1,0 +1,24 @@
+task makeDll << {
+    def os = System.getProperty("os.name").toLowerCase()
+    def dllPath
+    if(os.contains("windows")) {
+        dllPath = 'C:\\Program Files\\Unity\\Editor\\Data\\Managed\\'
+    } else if(os.contains("mac")) {
+        dllPath = '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/'
+    } else {
+    	throw new GradleScriptException('Must be using Mac or Windows')
+    }
+
+    def engineDll = dllPath+'UnityEngine.dll'
+    def editorDll = dllPath+'UnityEditor.dll'
+
+    file("$buildDir").mkdirs()
+
+	project.exec {
+		commandLine 'mcs'
+		args '-r:'+engineDll+','+editorDll
+		args '-target:library'
+		args '-out:'+file("$buildDir/ouya.dll")
+		file('src').listFiles().each() {args it}
+	}
+}

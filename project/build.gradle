@@ -1,5 +1,17 @@
-task unityPackage(dependsOn: ':java-plugin:build') {
+task copyJar(dependsOn: ':java-plugin:build', type: Copy) {
+	from new File(project(':java-plugin').buildDir, 'bundles/release/classes.jar')
+	into 'Assets/Plugins/Android/libs'
+	rename {'ouya.jar'}
+}
 
+task copyDll(dependsOn: ':dll:makeDll', type: Copy) {
+	from new File(project(':dll').buildDir, 'ouya.dll')
+	into 'Assets/Ouya/SDK'
+}
+
+task copyFiles(dependsOn: ['copyJar', 'copyDll'])
+
+task unityPackage(dependsOn: 'copyFiles') {
 	def unityExecutable = project.hasProperty('unityExecutable') ?
 		project.property('unityExecutable') :
 		'/Applications/Unity/Unity.app/Contents/MacOS/Unity'
