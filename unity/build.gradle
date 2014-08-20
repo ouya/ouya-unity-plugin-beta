@@ -1,11 +1,11 @@
-task copyJar(dependsOn: ':java-plugin:build', type: Copy) {
-	from new File(project(':java-plugin').buildDir, 'bundles/release/classes.jar')
+task copyJar(dependsOn: ':java:build', type: Copy) {
+	from new File(project(':java').buildDir, 'bundles/release/classes.jar')
 	into 'Assets/Plugins/Android/libs'
 	rename {'ouya.jar'}
 }
 
-task copyDll(dependsOn: ':dll:makeDll', type: Copy) {
-	from new File(project(':dll').buildDir, 'ouya.dll')
+task copyDll(dependsOn: ':cs:makeDll', type: Copy) {
+	from new File(project(':cs').buildDir, 'ouya.dll')
 	into 'Assets/Ouya/SDK'
 }
 

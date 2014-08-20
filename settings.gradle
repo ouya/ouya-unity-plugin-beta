@@ -1,1 +1,1 @@
-include 'java-plugin', 'dll', 'project'
+include 'java', 'cs', 'unity'

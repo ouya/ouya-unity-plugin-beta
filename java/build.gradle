@@ -13,7 +13,7 @@ buildscript {
 
 dependencies {
     // OUYA SDK
-    compile files('../project/Assets/Plugins/Android/libs/ouya-sdk.jar')
+    compile files('../unity/Assets/Plugins/Android/libs/ouya-sdk.jar')
 
     // Unity Classes
     def os = System.getProperty("os.name").toLowerCase()
