@@ -1,0 +1,30 @@
+apply plugin: 'android-library'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.9.+'
+    }
+}
+
+
+
+dependencies {
+    // OUYA SDK
+    compile files('../project/Assets/Plugins/Android/libs/ouya-sdk.jar')
+
+    // Unity Classes
+    def os = System.getProperty("os.name").toLowerCase()
+    if(os.contains("windows")) {
+        // TODO: insert path to Windows classes.jar
+    } else if(os.contains("mac")) {
+        compile files('/Applications/Unity/Unity.app/Contents/PlaybackEngines/AndroidPlayer/bin/classes.jar')
+    }
+}
+
+android {
+    compileSdkVersion 16
+    buildToolsVersion '19.1'
+}

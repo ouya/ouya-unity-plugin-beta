@@ -1,0 +1,9 @@
+Library/
+Temp/
+*.csproj
+*.sln
+*.userprefs
+*.apk
+.gradle/
+build/
+*.unitypackage
