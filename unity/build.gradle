@@ -12,15 +12,19 @@ task copyDll(dependsOn: ':cs:makeDll', type: Copy) {
 task copyFiles(dependsOn: ['copyJar', 'copyDll'])
 
 task unityPackage(dependsOn: 'copyFiles') {
-	def unityExecutable = project.hasProperty('unityExecutable') ?
-		project.property('unityExecutable') :
-		'/Applications/Unity/Unity.app/Contents/MacOS/Unity'
-
 	def logFile = file("$buildDir/unityPackage.log")
 	logFile.parentFile.mkdirs()
 
+	def unityCmd
+	def os = System.getProperty("os.name").toLowerCase()
+	if(os.contains('windows')) {
+		unityCmd = ['cmd', '/c', 'C:\\Program Files (x86)\\Unity\\Editor\\Unity.exe']
+	} else if (os.contains('mac')) {
+		unityCmd = '/Applications/Unity/Unity.app/Contents/MacOS/Unity'
+	}
+
 	project.exec {
-		commandLine unityExecutable
+		commandLine unityCmd
 		args '-batchMode'
 		args '-quit'
 		args '-projectPath'
