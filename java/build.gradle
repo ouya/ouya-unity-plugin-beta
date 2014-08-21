@@ -18,7 +18,7 @@ dependencies {
     // Unity Classes
     def os = System.getProperty("os.name").toLowerCase()
     if(os.contains("windows")) {
-        // TODO: insert path to Windows classes.jar
+        compile files('C:/Program Files (x86)/Unity/Editor/Data/PlaybackEngines/androidplayer/release/bin/classes.jar')
     } else if(os.contains("mac")) {
         compile files('/Applications/Unity/Unity.app/Contents/PlaybackEngines/AndroidPlayer/bin/classes.jar')
     }
