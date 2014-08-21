@@ -18,7 +18,7 @@ task unityPackage(dependsOn: 'copyFiles') {
 	def unityCmd
 	def os = System.getProperty("os.name").toLowerCase()
 	if(os.contains('windows')) {
-		unityCmd = ['cmd', '/c', 'C:\\Program Files (x86)\\Unity\\Editor\\Unity.exe']
+		unityCmd = ['cmd', '/c', 'C:\\Program%20Files%20(x86)\\Unity\\Editor\\Unity.exe']
 	} else if (os.contains('mac')) {
 		unityCmd = '/Applications/Unity/Unity.app/Contents/MacOS/Unity'
 	}
