@@ -2,7 +2,7 @@ task makeDll << {
     def os = System.getProperty("os.name").toLowerCase()
     def dllPath
     if(os.contains("windows")) {
-        dllPath = 'C:\\Program Files\\Unity\\Editor\\Data\\Managed\\'
+        dllPath = 'C:\\Program Files (x86)\\Unity\\Editor\\Data\\Managed\\'
     } else if(os.contains("mac")) {
         dllPath = '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/'
     } else {
