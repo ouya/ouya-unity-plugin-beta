@@ -7,3 +7,5 @@ Temp/
 .gradle/
 build/
 *.unitypackage
+ouya.dll
+ouya.jar
