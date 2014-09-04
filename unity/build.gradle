@@ -4,12 +4,17 @@ task copyJar(dependsOn: ':java:build', type: Copy) {
 	rename {'ouya.jar'}
 }
 
-task copyDll(dependsOn: ':cs:makeDll', type: Copy) {
+task copySdkDll(dependsOn: ':cs:makeSdkDll', type: Copy) {
 	from new File(project(':cs').buildDir, 'ouya.dll')
 	into 'Assets/Ouya/SDK'
 }
 
-task copyFiles(dependsOn: ['copyJar', 'copyDll'])
+task copyEditorDll(dependsOn: ':cs:makeEditorDll', type: Copy) {
+	from new File(project(':cs').buildDir, 'ouya-editor.dll')
+	into 'Assets/Ouya/Editor'
+}
+
+task copyFiles(dependsOn: ['copyJar', 'copySdkDll', 'copyEditorDll'])
 
 task unityPackage(dependsOn: 'copyFiles') {
 	def logFile = file("$buildDir/unityPackage.log")

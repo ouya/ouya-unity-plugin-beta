@@ -1,6 +1,4 @@
-﻿#if UNITY_ANDROID && !UNITY_EDITOR
-
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace Android.Graphics.Drawables
@@ -13,6 +11,7 @@ namespace Android.Graphics.Drawables
 
         static BitmapDrawable()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -51,6 +50,7 @@ namespace Android.Graphics.Drawables
 
         public static explicit operator BitmapDrawable(Drawable drawable)
         {
+            if(Application.platform != RuntimePlatform.Android) return null;
             BitmapDrawable newDrawable = new BitmapDrawable();
             newDrawable.Instance = drawable.Instance;
             return newDrawable;
@@ -58,6 +58,7 @@ namespace Android.Graphics.Drawables
 
         public Bitmap getBitmap()
         {
+            if(Application.platform != RuntimePlatform.Android) return null;
             if (_instance == IntPtr.Zero)
             {
                 Debug.LogError("_instance is not initialized");
@@ -87,5 +88,3 @@ namespace Android.Graphics.Drawables
         }
     }
 }
-
-#endif

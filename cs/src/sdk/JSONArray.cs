@@ -1,6 +1,4 @@
-﻿#if UNITY_ANDROID && !UNITY_EDITOR
-
-//#define VERBOSE_LOGGING
+﻿//#define VERBOSE_LOGGING
 
 using System;
 using System.Reflection;
@@ -21,6 +19,7 @@ namespace org.json
 
         static JSONArray()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -48,6 +47,7 @@ namespace org.json
 
         private static void JNIFind()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -132,6 +132,7 @@ namespace org.json
 
         public void Dispose()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
 #if VERBOSE_LOGGING
             Debug.Log(MethodBase.GetCurrentMethod().Name);
 #endif
@@ -144,6 +145,7 @@ namespace org.json
 
         public int length()
         {
+            if(Application.platform != RuntimePlatform.Android) return 0;
 #if VERBOSE_LOGGING
             Debug.Log(MethodBase.GetCurrentMethod().Name);
 #endif
@@ -165,6 +167,7 @@ namespace org.json
 
         public org.json.JSONObject getJSONObject(int index)
         {
+            if(Application.platform != RuntimePlatform.Android) return null;
 #if VERBOSE_LOGGING
             Debug.Log(MethodBase.GetCurrentMethod().Name);
 #endif
@@ -194,6 +197,7 @@ namespace org.json
 
         public int getInt(int index)
         {
+            if(Application.platform != RuntimePlatform.Android) return 0;
 #if VERBOSE_LOGGING
             Debug.Log(MethodBase.GetCurrentMethod().Name);
 #endif
@@ -216,6 +220,7 @@ namespace org.json
 
         public string getString(int index)
         {
+            if(Application.platform != RuntimePlatform.Android) return null;
 #if VERBOSE_LOGGING
             Debug.Log(MethodBase.GetCurrentMethod().Name);
 #endif
@@ -244,5 +249,3 @@ namespace org.json
         }
     }
 }
-
-#endif

@@ -1,14 +1,11 @@
-﻿#if UNITY_ANDROID && !UNITY_EDITOR
-using Android.Graphics.Drawables;
+﻿using Android.Graphics.Drawables;
 using System;
 using UnityEngine;
-#endif
 
 namespace tv.ouya.console.api
 {
     public class OuyaController
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
         public class ButtonData
         {
             private static IntPtr _jcButtonData = IntPtr.Zero;
@@ -18,6 +15,7 @@ namespace tv.ouya.console.api
 
             static ButtonData()
             {
+                if(Application.platform != RuntimePlatform.Android) return;
                 try
                 {
                     {
@@ -127,7 +125,6 @@ namespace tv.ouya.console.api
         }
 
         private const string LOG_TAG = "OuyaController";
-#endif
 
         public const int AXIS_LS_X = 0;
         public const int AXIS_LS_Y = 1;
@@ -152,7 +149,6 @@ namespace tv.ouya.console.api
 
         public const int MAX_CONTROLLERS = 4;
 
-#if UNITY_ANDROID && !UNITY_EDITOR
 
         private static IntPtr _jcOuyaController = IntPtr.Zero;
         private static IntPtr _jmGetButtonData = IntPtr.Zero;
@@ -163,6 +159,7 @@ namespace tv.ouya.console.api
 
         static OuyaController()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -248,6 +245,7 @@ namespace tv.ouya.console.api
 
         public static OuyaController getControllerByPlayer(int deviceId)
         {
+            if(Application.platform != RuntimePlatform.Android) return null;
             if (_jcOuyaController == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaController is not initialized");
@@ -272,6 +270,7 @@ namespace tv.ouya.console.api
 
         public string getDeviceName()
         {
+            if(Application.platform != RuntimePlatform.Android) return null;
             if (_instance == IntPtr.Zero)
             {
                 Debug.LogError("_instance is not initialized");
@@ -297,6 +296,7 @@ namespace tv.ouya.console.api
 
         public static ButtonData getButtonData(int button)
         {
+            if(Application.platform != RuntimePlatform.Android) return null;
             if (_jcOuyaController == IntPtr.Zero)
             {
                 Debug.Log("_jcOuyaController is not initialized");
@@ -320,6 +320,7 @@ namespace tv.ouya.console.api
 
         public static void showCursor(bool visible)
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaController == IntPtr.Zero)
             {
                 Debug.Log("_jcOuyaController is not initialized");
@@ -332,6 +333,5 @@ namespace tv.ouya.console.api
             }
             AndroidJNI.CallStaticVoidMethod(_jcOuyaController, _jmShowCursor, new jvalue[] { new jvalue() { z = visible } });
         }
-#endif
     }
 }

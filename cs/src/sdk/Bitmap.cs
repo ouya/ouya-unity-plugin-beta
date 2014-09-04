@@ -1,6 +1,4 @@
-﻿#if UNITY_ANDROID && !UNITY_EDITOR
-
-using java.io;
+﻿using java.io;
 using System;
 using System.IO;
 using UnityEngine;
@@ -17,6 +15,7 @@ namespace Android.Graphics
 
             static CompressFormat()
             {
+                if(Application.platform != RuntimePlatform.Android) return;
                 try
                 {
                     {
@@ -55,6 +54,7 @@ namespace Android.Graphics
 
             public static CompressFormat GetObject(IntPtr instance)
             {
+                if(Application.platform != RuntimePlatform.Android) return null;
                 CompressFormat result = new CompressFormat();
                 result._instance = instance;
                 return result;
@@ -64,6 +64,7 @@ namespace Android.Graphics
             {
                 get
                 {
+                    if(Application.platform != RuntimePlatform.Android) return null;
                     if (_jcCompressFormat == IntPtr.Zero)
                     {
                         Debug.LogError("_jcCompressFormat is not initialized");
@@ -92,6 +93,7 @@ namespace Android.Graphics
 
         static Bitmap()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -150,5 +152,3 @@ namespace Android.Graphics
         }
     }
 }
-
-#endif

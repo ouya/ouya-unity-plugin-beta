@@ -1,4 +1,4 @@
-task makeDll << {
+task makeSdkDll << {
     def os = System.getProperty("os.name").toLowerCase()
     def dllPath
     def mcsCmd
@@ -9,7 +9,34 @@ task makeDll << {
         dllPath = '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/'
         mcsCmd = 'mcs'
     } else {
-    	throw new GradleScriptException('Must be using Mac or Windows')
+        throw new GradleScriptException('Must be using Mac or Windows')
+    }
+
+    def engineDll = dllPath+'UnityEngine.dll'
+
+    file("$buildDir").mkdirs()
+
+    project.exec {
+        commandLine mcsCmd
+        args '-r:'+engineDll
+        args '-target:library'
+        args '-out:'+file("$buildDir/ouya.dll")
+        file('src/sdk/').listFiles().each() {args it}
+    }
+}
+
+task makeEditorDll << {
+    def os = System.getProperty("os.name").toLowerCase()
+    def dllPath
+    def mcsCmd
+    if(os.contains("windows")) {
+        dllPath = 'C:\\Program Files (x86)\\Unity\\Editor\\Data\\Managed\\'
+        mcsCmd = ['cmd', '/c', 'mcs']
+    } else if(os.contains("mac")) {
+        dllPath = '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/'
+        mcsCmd = 'mcs'
+    } else {
+        throw new GradleScriptException('Must be using Mac or Windows')
     }
 
     def engineDll = dllPath+'UnityEngine.dll'
@@ -17,11 +44,11 @@ task makeDll << {
 
     file("$buildDir").mkdirs()
 
-	project.exec {
-		commandLine mcsCmd
-		args '-r:'+engineDll+','+editorDll
-		args '-target:library'
-		args '-out:'+file("$buildDir/ouya.dll")
-		file('src').listFiles().each() {args it}
-	}
+    project.exec {
+        commandLine mcsCmd
+        args '-r:'+engineDll+','+editorDll
+        args '-target:library'
+        args '-out:'+file("$buildDir/ouya-editor.dll")
+        file('src/editor/').listFiles().each() {args it}
+    }
 }

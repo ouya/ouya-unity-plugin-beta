@@ -1,6 +1,4 @@
-﻿#if UNITY_ANDROID && !UNITY_EDITOR
-
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace java.io
@@ -16,6 +14,7 @@ namespace java.io
 
         static ByteArrayOutputStream()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -96,6 +95,7 @@ namespace java.io
 
         public ByteArrayOutputStream()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             _instance = AndroidJNI.AllocObject(_jcByteArrayOutputStream);
             if (_instance == IntPtr.Zero)
             {
@@ -110,6 +110,7 @@ namespace java.io
 
         public void close()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_instance == IntPtr.Zero)
             {
                 Debug.LogError("_instance is not initialized");
@@ -121,6 +122,7 @@ namespace java.io
 
         public int size()
         {
+            if(Application.platform != RuntimePlatform.Android) return 0;
             if (_instance == IntPtr.Zero)
             {
                 Debug.LogError("_instance is not initialized");
@@ -134,6 +136,7 @@ namespace java.io
 
         public byte[] toByteArray()
         {
+            if(Application.platform != RuntimePlatform.Android) return null;
             if (_instance == IntPtr.Zero)
             {
                 Debug.LogError("_instance is not initialized");
@@ -167,5 +170,3 @@ namespace java.io
         }
     }
 }
-
-#endif

@@ -1,6 +1,4 @@
-﻿#if UNITY_ANDROID && !UNITY_EDITOR
-
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace tv.ouya.sdk
@@ -26,6 +24,7 @@ namespace tv.ouya.sdk
 
         static OuyaUnityPlugin()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -232,6 +231,7 @@ namespace tv.ouya.sdk
 
         public OuyaUnityPlugin(IntPtr currentActivity)
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.Log("_jcOuyaUnityPlugin is not initialized");
@@ -247,6 +247,7 @@ namespace tv.ouya.sdk
 
         public static void setDeveloperId(string developerId)
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -264,6 +265,7 @@ namespace tv.ouya.sdk
 
         public static void unityInitialized()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -279,6 +281,7 @@ namespace tv.ouya.sdk
 
         public static string getGameData(string key)
         {
+            if(Application.platform != RuntimePlatform.Android) return null;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -305,6 +308,7 @@ namespace tv.ouya.sdk
 
         public static void putGameData(string key, string val)
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -324,6 +328,7 @@ namespace tv.ouya.sdk
 
         public static void fetchGamerInfo()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -339,6 +344,7 @@ namespace tv.ouya.sdk
 
         public static void addGetProduct()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -354,6 +360,7 @@ namespace tv.ouya.sdk
 
         public static void addGetProduct(string identifier)
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -371,6 +378,7 @@ namespace tv.ouya.sdk
 
         public static void debugGetProductList()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -386,6 +394,7 @@ namespace tv.ouya.sdk
 
         public static void clearGetProductList()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -401,6 +410,7 @@ namespace tv.ouya.sdk
 
         public static void getProductsAsync()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -416,6 +426,7 @@ namespace tv.ouya.sdk
 
         public static void requestPurchaseAsync(string identifier)
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -433,6 +444,7 @@ namespace tv.ouya.sdk
 
         public static void getReceiptsAsync()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -448,6 +460,7 @@ namespace tv.ouya.sdk
 
         public static bool isRunningOnOUYASupportedHardware()
         {
+            if(Application.platform != RuntimePlatform.Android) return false;
             if (_jcOuyaUnityPlugin == IntPtr.Zero)
             {
                 Debug.LogError("_jcOuyaUnityPlugin is not initialized");
@@ -462,5 +475,3 @@ namespace tv.ouya.sdk
         }
     }
 }
-
-#endif

@@ -1,6 +1,4 @@
-﻿#if UNITY_ANDROID && !UNITY_EDITOR
-
-//#define VERBOSE_LOGGING
+﻿//#define VERBOSE_LOGGING
 
 using System;
 #if VERBOSE_LOGGING
@@ -20,6 +18,7 @@ namespace tv.ouya.sdk
 
         static OuyaUnityActivity()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -47,6 +46,7 @@ namespace tv.ouya.sdk
 
         private static void JNIFind()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -99,6 +99,7 @@ namespace tv.ouya.sdk
 
         public void debugDisplayKeyDownElapsed()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
 #if VERBOSE_LOGGING
             Debug.Log(MethodBase.GetCurrentMethod().Name);
 #endif
@@ -119,6 +120,7 @@ namespace tv.ouya.sdk
 
         public void debugDisplayKeyUpElapsed()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
 #if VERBOSE_LOGGING
             Debug.Log(MethodBase.GetCurrentMethod().Name);
 #endif
@@ -139,5 +141,3 @@ namespace tv.ouya.sdk
 
     }
 }
-
-#endif

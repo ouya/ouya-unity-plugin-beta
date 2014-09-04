@@ -15,9 +15,7 @@
  */
 
 using System.Collections.Generic;
-#if UNITY_ANDROID && !UNITY_EDITOR
 using System.Threading;
-#endif
 using UnityEngine;
 
 public class OuyaGameObject : MonoBehaviour
@@ -231,14 +229,12 @@ public class OuyaGameObject : MonoBehaviour
 
         #region Init Input
 
-#if UNITY_ANDROID && !UNITY_EDITOR
-        if (m_useInputThreading)
+        if(Application.platform != RuntimePlatform.Android && m_useInputThreading)
         {
             ThreadStart ts = new ThreadStart(InputWorker);
             Thread thread = new Thread(ts);
             thread.Start();
         }
-#endif
 
         #endregion
     }
@@ -388,7 +384,6 @@ public class OuyaGameObject : MonoBehaviour
 
     #region Controllers
 
-#if UNITY_ANDROID && !UNITY_EDITOR
     private bool m_waitForExit = true;
     void OnDestroy()
     {
@@ -424,7 +419,6 @@ public class OuyaGameObject : MonoBehaviour
             Thread.Sleep(1);
         }
     }
-#endif
 
     private void FixedUpdate()
     {

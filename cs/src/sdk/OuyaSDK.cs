@@ -22,24 +22,21 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-#if UNITY_ANDROID && !UNITY_EDITOR
 using com.unity3d.player;
 using org.json;
 using tv.ouya.console.api;
 using tv.ouya.sdk;
-#endif
 using UnityEngine;
 
 public static class OuyaSDK
 {
     public const string VERSION = "1.0.14.2";
-
-#if UNITY_ANDROID && !UNITY_EDITOR
     
     private static OuyaUnityPlugin m_ouyaUnityPlugin = null;
 
     static OuyaSDK()
     {
+        if(Application.platform != RuntimePlatform.Android) return;
         // attach our thread to the java vm; obviously the main thread is already attached but this is good practice..
         AndroidJNI.AttachCurrentThread();
 
@@ -68,9 +65,6 @@ public static class OuyaSDK
         // EXPORT_API void clearButtonStates()
         public static extern void clearButtonStates();
     }
-#endif
-
-#if UNITY_ANDROID && !UNITY_EDITOR
 
     public class OuyaInput
     {
@@ -343,9 +337,6 @@ public static class OuyaSDK
         #endregion
     }
 
-#endif
-
-#if UNITY_ANDROID && !UNITY_EDITOR
     /// <summary>
     /// Cache joysticks
     /// </summary>
@@ -365,16 +356,13 @@ public static class OuyaSDK
         }
         return null;
     }
-#endif
 
     /// <summary>
     /// Update joysticks with a timer
     /// </summary>
     public static void UpdateJoysticks()
     {
-#if !UNITY_ANDROID || UNITY_EDITOR
-        return;
-#else
+        if(Application.platform != RuntimePlatform.Android) return;
         if (m_timerJoysticks < DateTime.Now)
         {
             //check for new joysticks every N seconds
@@ -424,7 +412,6 @@ public static class OuyaSDK
                 }
             }
         }
-#endif
     }
 
     /// <summary>
@@ -445,10 +432,9 @@ public static class OuyaSDK
     {
         m_developerId = developerId;
 
-#if UNITY_ANDROID && !UNITY_EDITOR
+        if(Application.platform != RuntimePlatform.Android) return;
         OuyaUnityPlugin.setDeveloperId(developerId);
         OuyaUnityPlugin.unityInitialized();
-#endif
     }
 
     /// <summary>
@@ -474,60 +460,47 @@ public static class OuyaSDK
 
     public static void fetchGamerInfo()
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
+        if(Application.platform != RuntimePlatform.Android) return;
         OuyaUnityPlugin.fetchGamerInfo();
-#endif
     }
 
     public static void putGameData(string key, string val)
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
+        if(Application.platform != RuntimePlatform.Android) return;
         OuyaUnityPlugin.putGameData(key, val);
-#endif
     }
 
     public static string getGameData(string key)
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
+        if(Application.platform != RuntimePlatform.Android) return String.Empty;
         return OuyaUnityPlugin.getGameData(key);
-#else
-        return String.Empty;
-#endif
     }
 
     public static void requestProductList(List<Purchasable> purchasables)
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
+        if(Application.platform != RuntimePlatform.Android) return;
         foreach (Purchasable purchasable in purchasables)
         {
             //Debug.Log(string.Format("Unity Adding: {0}", purchasable.getProductId()));
             OuyaUnityPlugin.addGetProduct(purchasable.productId);
         }
         OuyaUnityPlugin.getProductsAsync();
-#endif
     }
 
     public static void requestPurchase(Purchasable purchasable)
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
         OuyaUnityPlugin.requestPurchaseAsync(purchasable.productId);
-#endif
     }
 
     public static void requestReceiptList()
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
         OuyaUnityPlugin.getReceiptsAsync();
-#endif
     }
 
     public static bool isRunningOnOUYASupportedHardware()
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
+        if(Application.platform != RuntimePlatform.Android) return false;
         return OuyaUnityPlugin.isRunningOnOUYASupportedHardware();
-#else
-        return false;
-#endif
     }
 
     #endregion
@@ -543,7 +516,7 @@ public static class OuyaSDK
         public static GamerInfo Parse(string jsonData)
         {
             GamerInfo result = new GamerInfo();
-#if UNITY_ANDROID && !UNITY_EDITOR
+            if(Application.platform != RuntimePlatform.Android) return result;
             //Debug.Log(jsonData);
             using (JSONObject json = new JSONObject(jsonData))
             {
@@ -556,7 +529,6 @@ public static class OuyaSDK
                     result.username = json.getString("username");
                 }
             }
-#endif
             return result;
         }
     }
@@ -582,7 +554,7 @@ public static class OuyaSDK
         public static Product Parse(string jsonData)
         {
             Product result = new Product();
-#if UNITY_ANDROID && !UNITY_EDITOR
+            if(Application.platform != RuntimePlatform.Android) return result;
             //Debug.Log(jsonData);
             using (JSONObject json = new JSONObject(jsonData))
             {
@@ -619,7 +591,6 @@ public static class OuyaSDK
                     result.developerName = json.getString("developerName");
                 }
             }
-#endif
             return result;
         }
     }
@@ -639,7 +610,7 @@ public static class OuyaSDK
         public static Receipt Parse(string jsonData)
         {
             Receipt result = new Receipt();
-#if UNITY_ANDROID && !UNITY_EDITOR
+            if(Application.platform != RuntimePlatform.Android) return result;
             //Debug.Log(jsonData);
             using (JSONObject json = new JSONObject(jsonData))
             {
@@ -680,7 +651,6 @@ public static class OuyaSDK
                     result.generatedDate = date;
                 }
             }
-#endif
             return result;
         }
     }

@@ -1,6 +1,4 @@
-﻿#if UNITY_ANDROID && !UNITY_EDITOR
-
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace com.unity3d.player
@@ -13,6 +11,7 @@ namespace com.unity3d.player
 
         static UnityPlayer()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -38,6 +37,7 @@ namespace com.unity3d.player
 
         private static void JNIFind()
         {
+            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -64,6 +64,7 @@ namespace com.unity3d.player
         {
             get
             {
+                if(Application.platform != RuntimePlatform.Android) return IntPtr.Zero;
                 JNIFind();
 
                 if (_jcUnityPlayer == IntPtr.Zero)
@@ -91,5 +92,3 @@ namespace com.unity3d.player
         }
     }
 }
-
-#endif

@@ -1,6 +1,4 @@
-﻿#if UNITY_ANDROID && !UNITY_EDITOR
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using tv.ouya.console.api;
 
@@ -56,5 +54,3 @@ namespace tv.ouya.console.api
         }
     }
 }
-
-#endif
