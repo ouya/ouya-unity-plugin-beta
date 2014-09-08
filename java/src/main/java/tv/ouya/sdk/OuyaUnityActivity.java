@@ -21,7 +21,7 @@ public class OuyaUnityActivity extends OuyaActivity
 
 	static {
     	Log.i(TAG, "Loading lib-ouya-ndk...");
-//        System.loadLibrary("-ouya-ndk");
+        System.loadLibrary("-ouya-ndk");
     }
 	
 	@Override

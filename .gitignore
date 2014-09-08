@@ -12,3 +12,8 @@ build/
 *.jar.meta
 *.dll.meta
 *.so
+*.so.meta
+armeabi.meta
+armeabi-v7a.meta
+mips.meta
+x86.meta
