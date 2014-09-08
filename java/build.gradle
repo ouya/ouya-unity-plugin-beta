@@ -27,4 +27,13 @@ dependencies {
 android {
     compileSdkVersion 16
     buildToolsVersion '19.1'
+
+    defaultConfig {
+        ndk {
+            moduleName 'lib-ouya-ndk'
+            stl 'stlport_static'
+            cFlags '-Wno-error=format-security'
+            ldLibs 'c', 'm', 'log'
+        }
+    }
 }

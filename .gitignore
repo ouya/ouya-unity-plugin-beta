@@ -11,3 +11,4 @@ build/
 *.dll
 *.jar.meta
 *.dll.meta
+*.so
