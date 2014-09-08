@@ -21,9 +21,20 @@ task copyEditorDll(dependsOn: ':cs:makeEditorDll', type: Copy) {
 	into 'Assets/Ouya/Editor'
 }
 
+task removeFiles(type: Delete) {
+	delete 'Assets/Ouya/Android/libs/ouya.jar', 
+		'Assets/Ouya/Android/libs/ouya.jar.meta', 
+		'Assets/Ouya/SDK/ouya.dll',
+		'Assets/Ouya/SDK/ouya.dll.meta', 
+		'Assets/Ouya/Editor/ouya-editor.dll',
+		'Assets/Ouya/Editor/ouya-editor.dll.meta'
+}
+
+task clean(dependsOn: 'removeFiles'){}
+
 task copyFiles(dependsOn: ['copyJar', 'copyLibs', 'copySdkDll', 'copyEditorDll'])
 
-task unityPackage(dependsOn: 'copyFiles') {
+task unityPackage(dependsOn: 'copyFiles') << {
 	def logFile = file("$buildDir/unityPackage.log")
 	logFile.parentFile.mkdirs()
 
