@@ -10,10 +10,17 @@ public class OuyaBuildProcess {
 	[PostProcessBuild(999)]
 	static void OnPostProcessBuildPlayer(BuildTarget target, string buildPath) {
 		CheckAndroidManifest();
+		CheckOuyaIcon();
 	}
 
 	static void CheckAndroidManifest() {
 		SyncBundleId(true);
+	}
+
+	static void CheckOuyaIcon() {
+		if(!File.Exists("Assets/Plugins/Android/res/drawable-xhdpi/ouya_icon.png")) {
+			EditorUtility.DisplayDialog("Missing OUYA Icon", "We didn't find an OUYA icon in your plugin folder. Please place your icon in the Plugins/Android/res/drawable-xhdpi/ folder with the filename ouya_icon.png", "Continue");
+		}
 	}
 
 	[MenuItem("OUYA/Sync Bundle ID")]
