@@ -18,6 +18,6 @@ If you'd like to modify any of the plugin code, you will need to compile the plu
 This plugin relies on the gradle build system to build all of its components. A gradle wrapper is included in the repo, so no additional software should be needed.
 
 To build the plugin, run the following command from within the root directory:  
-`./gradlew clean unityPacakge`
+`./gradlew clean unityPacakge`  
 or on Windows:  
 `gradle.bat clean unityPackage`
