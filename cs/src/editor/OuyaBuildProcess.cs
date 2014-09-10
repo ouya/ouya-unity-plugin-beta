@@ -9,8 +9,15 @@ using System.Xml;
 public class OuyaBuildProcess {
 	[PostProcessBuild(999)]
 	static void OnPostProcessBuildPlayer(BuildTarget target, string buildPath) {
+		CheckKey();
 		CheckAndroidManifest();
 		CheckOuyaIcon();
+	}
+
+	static void CheckKey() {
+		if(!File.Exists("Assets/Plugins/Android/assets/key.der")) {
+			EditorUtility.DisplayDialog("Missing OUYA Signing Key", "We didn't find your signing key. Please place your key.der in the Plugins/Android/assets/ folder", "Continue");
+		}
 	}
 
 	static void CheckAndroidManifest() {
