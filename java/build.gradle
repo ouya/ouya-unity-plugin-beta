@@ -17,10 +17,19 @@ dependencies {
 
     // Unity Classes
     def os = System.getProperty("os.name").toLowerCase()
+    def unityFolder
+    if(System.getenv("UNITY_HOME")) {
+        unityFolder = System.getenv("UNITY_HOME")
+    } else if(os.contains('windows')) {
+        unityFolder = 'C:\\Program Files (x86)\\Unity'
+    } else if (os.contains('mac')) {
+        unityFolder = '/Applications/Unity/Unity.app'
+    }
+
     if(os.contains("windows")) {
-        compile files('C:/Program Files (x86)/Unity/Editor/Data/PlaybackEngines/androidplayer/release/bin/classes.jar')
+        compile files(unityFolder+'\\Editor\\Data\\PlaybackEngines\\androidplayer\\release\\bin\\classes.jar')
     } else if(os.contains("mac")) {
-        compile files('/Applications/Unity/Unity.app/Contents/PlaybackEngines/AndroidPlayer/bin/classes.jar')
+        compile files(unityFolder+'/Contents/PlaybackEngines/AndroidPlayer/bin/classes.jar')
     }
 }
 
