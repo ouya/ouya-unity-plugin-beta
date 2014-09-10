@@ -38,12 +38,22 @@ task unityPackage(dependsOn: 'copyFiles') << {
 	def logFile = file("$buildDir/unityPackage.log")
 	logFile.parentFile.mkdirs()
 
-	def unityCmd
+	
 	def os = System.getProperty("os.name").toLowerCase()
-	if(os.contains('windows')) {
-		unityCmd = ['cmd', '/c', '\"C:\\Program Files (x86)\\Unity\\Editor\\Unity.exe\"']
+	def unityFolder
+    if(System.getenv("UNITY_HOME")) {
+        unityFolder = System.getenv("UNITY_HOME")
+    } else if(os.contains('windows')) {
+		unityFolder = 'C:\\Program Files (x86)\\Unity'
 	} else if (os.contains('mac')) {
-		unityCmd = '/Applications/Unity/Unity.app/Contents/MacOS/Unity'
+		unityFolder = '/Applications/Unity/Unity.app'
+	}
+
+	def unityCmd
+	if(os.contains('windows')) {
+		unityCmd = ['cmd', '/c', '\"'+unityFolder+'\\Editor\\Unity.exe\"']
+	} else if (os.contains('mac')) {
+		unityCmd = unityFolder+'/Contents/MacOS/Unity'
 	}
 
 	project.exec {

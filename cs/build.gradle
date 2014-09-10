@@ -1,12 +1,22 @@
 task makeSdkDll << {
     def os = System.getProperty("os.name").toLowerCase()
+    
+    def unityFolder
+    if(System.getenv("UNITY_HOME")) {
+        unityFolder = System.getenv("UNITY_HOME")
+    } else if(os.contains('windows')) {
+        unityFolder = 'C:\\Program Files (x86)\\Unity'
+    } else if (os.contains('mac')) {
+        unityFolder = '/Applications/Unity/Unity.app'
+    }
+
     def dllPath
     def mcsCmd
     if(os.contains("windows")) {
-        dllPath = 'C:\\Program Files (x86)\\Unity\\Editor\\Data\\Managed\\'
+        dllPath = unityFolder+'\\Editor\\Data\\Managed\\'
         mcsCmd = ['cmd', '/c', 'mcs']
     } else if(os.contains("mac")) {
-        dllPath = '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/'
+        dllPath = unityFolder+'/Contents/Frameworks/Managed/'
         mcsCmd = 'mcs'
     } else {
         throw new GradleScriptException('Must be using Mac or Windows')
@@ -27,17 +37,28 @@ task makeSdkDll << {
 
 task makeEditorDll << {
     def os = System.getProperty("os.name").toLowerCase()
+
+    def unityFolder
+    if(System.getenv("UNITY_HOME")) {
+        unityFolder = System.getenv("UNITY_HOME")
+    } else if(os.contains('windows')) {
+        unityFolder = 'C:\\Program Files (x86)\\Unity'
+    } else if (os.contains('mac')) {
+        unityFolder = '/Applications/Unity/Unity.app'
+    }
+
     def dllPath
     def mcsCmd
     if(os.contains("windows")) {
-        dllPath = 'C:\\Program Files (x86)\\Unity\\Editor\\Data\\Managed\\'
+        dllPath = unityFolder+'\\Editor\\Data\\Managed\\'
         mcsCmd = ['cmd', '/c', 'mcs']
     } else if(os.contains("mac")) {
-        dllPath = '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/'
+        dllPath = unityFolder+'/Contents/Frameworks/Managed/'
         mcsCmd = 'mcs'
     } else {
         throw new GradleScriptException('Must be using Mac or Windows')
     }
+    
 
     def engineDll = dllPath+'UnityEngine.dll'
     def editorDll = dllPath+'UnityEditor.dll'
