@@ -9,9 +9,11 @@ using System.Xml;
 public class OuyaBuildProcess {
 	[PostProcessBuild(999)]
 	static void OnPostProcessBuildPlayer(BuildTarget target, string buildPath) {
-		CheckKey();
-		CheckAndroidManifest();
-		CheckOuyaIcon();
+		if(target == BuildTarget.Android) {
+			CheckKey();
+			CheckAndroidManifest();
+			CheckOuyaIcon();
+		}
 	}
 
 	static void CheckKey() {
