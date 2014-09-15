@@ -10,7 +10,6 @@ build/
 *.jar
 *.dll
 *.jar.meta
-*.dll.meta
 *.so
 *.so.meta
 armeabi.meta

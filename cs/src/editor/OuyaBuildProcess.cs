@@ -32,7 +32,7 @@ public class OuyaBuildProcess {
 		}
 	}
 
-	[MenuItem("OUYA/Sync Bundle ID")]
+	[MenuItem("Edit/Sync Android Bundle ID")]
 	static void SyncBundleId() {
 		SyncBundleId(false);
 	}
