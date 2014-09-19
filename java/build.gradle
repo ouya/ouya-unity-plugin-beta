@@ -29,7 +29,7 @@ dependencies {
     if(os.contains("windows")) {
         compile files(unityFolder+'\\Editor\\Data\\PlaybackEngines\\androidplayer\\release\\bin\\classes.jar')
     } else if(os.contains("mac")) {
-        compile files(unityFolder+'/Contents/PlaybackEngines/AndroidPlayer/bin/classes.jar')
+        compile files(unityFolder+'/Contents/PlaybackEngines/AndroidPlayer/release/bin/classes.jar')
     }
 }
 
