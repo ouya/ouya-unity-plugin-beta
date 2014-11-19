@@ -1,4 +1,6 @@
-﻿using System;
+#if UNITY_ANDROID && !UNITY_EDITOR
+
+using System;
 using UnityEngine;
 
 namespace Android.Graphics.Drawables
@@ -11,15 +13,16 @@ namespace Android.Graphics.Drawables
 
         static BitmapDrawable()
         {
-            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
                     string strName = "android/graphics/drawable/BitmapDrawable";
-                    _jcBitmapDrawable = AndroidJNI.FindClass(strName);
-                    if (_jcBitmapDrawable != IntPtr.Zero)
+                    IntPtr localRef = AndroidJNI.FindClass(strName);
+                    if (localRef != IntPtr.Zero)
                     {
                         Debug.Log(string.Format("Found {0} class", strName));
+                        _jcBitmapDrawable = AndroidJNI.NewGlobalRef(localRef);
+                        AndroidJNI.DeleteLocalRef(localRef);
                     }
                     else
                     {
@@ -50,7 +53,6 @@ namespace Android.Graphics.Drawables
 
         public static explicit operator BitmapDrawable(Drawable drawable)
         {
-            if(Application.platform != RuntimePlatform.Android) return null;
             BitmapDrawable newDrawable = new BitmapDrawable();
             newDrawable.Instance = drawable.Instance;
             return newDrawable;
@@ -58,7 +60,6 @@ namespace Android.Graphics.Drawables
 
         public Bitmap getBitmap()
         {
-            if(Application.platform != RuntimePlatform.Android) return null;
             if (_instance == IntPtr.Zero)
             {
                 Debug.LogError("_instance is not initialized");
@@ -76,8 +77,7 @@ namespace Android.Graphics.Drawables
                 Debug.LogError("Failed to get bitmap");
                 return null;
             }
-            Bitmap retVal = new Bitmap();
-            retVal.Instance = result;
+            Bitmap retVal = new Bitmap(result);
             return retVal;
         }
 
@@ -88,3 +88,5 @@ namespace Android.Graphics.Drawables
         }
     }
 }
+
+#endif

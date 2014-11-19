@@ -1,9 +1,13 @@
-﻿using System;
+//#define VERBOSE_LOGGING
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+
+using System;
 using UnityEngine;
 
 namespace java.io
 {
-    public class ByteArrayOutputStream
+    public class ByteArrayOutputStream : IDisposable
     {
         static IntPtr _jcByteArrayOutputStream = IntPtr.Zero;
         static IntPtr _jmClose = IntPtr.Zero;
@@ -14,15 +18,18 @@ namespace java.io
 
         static ByteArrayOutputStream()
         {
-            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
                     string strName = "java/io/ByteArrayOutputStream";
-                    _jcByteArrayOutputStream = AndroidJNI.FindClass(strName);
-                    if (_jcByteArrayOutputStream != IntPtr.Zero)
+                    IntPtr localRef = AndroidJNI.FindClass(strName);
+                    if (localRef != IntPtr.Zero)
                     {
+#if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} class", strName));
+#endif
+                        _jcByteArrayOutputStream = AndroidJNI.NewGlobalRef(localRef);
+                        AndroidJNI.DeleteLocalRef(localRef);
                     }
                     else
                     {
@@ -30,13 +37,25 @@ namespace java.io
                         return;
                     }
                 }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError(string.Format("Exception loading JNI - {0}", ex));
+            }
+        }
 
+        private static void JNIFind()
+        {
+            try
+            {
                 {
                     string strMethod = "<init>";
                     _jmConstructor = AndroidJNI.GetMethodID(_jcByteArrayOutputStream, strMethod, "()V");
                     if (_jmConstructor != IntPtr.Zero)
                     {
+#if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} method", strMethod));
+#endif
                     }
                     else
                     {
@@ -50,7 +69,9 @@ namespace java.io
                     _jmClose = AndroidJNI.GetMethodID(_jcByteArrayOutputStream, strMethod, "()V");
                     if (_jmClose != IntPtr.Zero)
                     {
+#if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} method", strMethod));
+#endif
                     }
                     else
                     {
@@ -64,7 +85,9 @@ namespace java.io
                     _jmSize = AndroidJNI.GetMethodID(_jcByteArrayOutputStream, strMethod, "()I");
                     if (_jmSize != IntPtr.Zero)
                     {
+#if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} method", strMethod));
+#endif
                     }
                     else
                     {
@@ -78,7 +101,9 @@ namespace java.io
                     _jmToByteArray = AndroidJNI.GetMethodID(_jcByteArrayOutputStream, strMethod, "()[B");
                     if (_jmToByteArray != IntPtr.Zero)
                     {
+#if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} method", strMethod));
+#endif
                     }
                     else
                     {
@@ -95,7 +120,8 @@ namespace java.io
 
         public ByteArrayOutputStream()
         {
-            if(Application.platform != RuntimePlatform.Android) return;
+            JNIFind();
+
             _instance = AndroidJNI.AllocObject(_jcByteArrayOutputStream);
             if (_instance == IntPtr.Zero)
             {
@@ -105,12 +131,29 @@ namespace java.io
 
             AndroidJNI.CallVoidMethod(_instance, _jmConstructor, new jvalue[0]);
 
-            //Debug.Log("Allocated ByteArrayOutputStream");
+#if VERBOSE_LOGGING
+            Debug.Log("Allocated ByteArrayOutputStream");
+#endif
+        }
+
+        public IntPtr GetInstance()
+        {
+            return _instance;
+        }
+
+        public void Dispose()
+        {
+            if (_instance != IntPtr.Zero)
+            {
+                AndroidJNI.DeleteLocalRef(_instance);
+                _instance = IntPtr.Zero;
+            }
         }
 
         public void close()
         {
-            if(Application.platform != RuntimePlatform.Android) return;
+            JNIFind();
+
             if (_instance == IntPtr.Zero)
             {
                 Debug.LogError("_instance is not initialized");
@@ -122,7 +165,8 @@ namespace java.io
 
         public int size()
         {
-            if(Application.platform != RuntimePlatform.Android) return 0;
+            JNIFind();
+
             if (_instance == IntPtr.Zero)
             {
                 Debug.LogError("_instance is not initialized");
@@ -130,13 +174,16 @@ namespace java.io
             }
 
             int result = AndroidJNI.CallIntMethod(_instance, _jmSize, new jvalue[0]);
+#if VERBOSE_LOGGING
             Debug.Log(string.Format("ByteArrayOutputStream.size() == {0}", result));
+#endif
             return result;
         }
 
         public byte[] toByteArray()
         {
-            if(Application.platform != RuntimePlatform.Android) return null;
+            JNIFind();
+
             if (_instance == IntPtr.Zero)
             {
                 Debug.LogError("_instance is not initialized");
@@ -162,11 +209,7 @@ namespace java.io
             AndroidJNI.DeleteLocalRef(result);
             return retVal;
         }
-
-        public IntPtr Instance
-        {
-            get { return _instance; }
-            set { _instance = value; }
-        }
     }
 }
+
+#endif

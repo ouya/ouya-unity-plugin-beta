@@ -1,11 +1,14 @@
-﻿using java.io;
+//#define VERBOSE_LOGGING
+#if UNITY_ANDROID && !UNITY_EDITOR
+
+using java.io;
 using System;
 using System.IO;
 using UnityEngine;
 
 namespace Android.Graphics
 {
-    public class Bitmap
+    public class Bitmap : IDisposable
     {
         public class CompressFormat
         {
@@ -15,15 +18,19 @@ namespace Android.Graphics
 
             static CompressFormat()
             {
-                if(Application.platform != RuntimePlatform.Android) return;
                 try
                 {
+                    IntPtr localRef;
                     {
                         string strName = "android/graphics/Bitmap$CompressFormat";
-                        _jcCompressFormat = AndroidJNI.FindClass(strName);
-                        if (_jcCompressFormat != IntPtr.Zero)
+                        localRef = AndroidJNI.FindClass(strName);
+                        if (localRef != IntPtr.Zero)
                         {
+#if VERBOSE_LOGGING
                             Debug.Log(string.Format("Found {0} class", strName));
+#endif
+                            _jcCompressFormat = AndroidJNI.NewGlobalRef(localRef);
+                            AndroidJNI.DeleteLocalRef(localRef);
                         }
                         else
                         {
@@ -31,13 +38,25 @@ namespace Android.Graphics
                             return;
                         }
                     }
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError(string.Format("Exception loading JNI - {0}", ex));
+                }
+            }
 
+            private static void JNIFind()
+            {
+                try
+                {
                     {
                         string strField = "PNG";
                         _jfPNG = AndroidJNI.GetStaticFieldID(_jcCompressFormat, strField, "Landroid/graphics/Bitmap$CompressFormat;");
                         if (_jfPNG != IntPtr.Zero)
                         {
+#if VERBOSE_LOGGING
                             Debug.Log(string.Format("Found {0} field", strField));
+#endif
                         }
                         else
                         {
@@ -54,7 +73,6 @@ namespace Android.Graphics
 
             public static CompressFormat GetObject(IntPtr instance)
             {
-                if(Application.platform != RuntimePlatform.Android) return null;
                 CompressFormat result = new CompressFormat();
                 result._instance = instance;
                 return result;
@@ -64,7 +82,8 @@ namespace Android.Graphics
             {
                 get
                 {
-                    if(Application.platform != RuntimePlatform.Android) return null;
+                    JNIFind();
+
                     if (_jcCompressFormat == IntPtr.Zero)
                     {
                         Debug.LogError("_jcCompressFormat is not initialized");
@@ -93,15 +112,18 @@ namespace Android.Graphics
 
         static Bitmap()
         {
-            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
                     string strName = "android/graphics/Bitmap";
-                    _jcBitmap = AndroidJNI.FindClass(strName);
-                    if (_jcBitmap != IntPtr.Zero)
+                    IntPtr localRef = AndroidJNI.FindClass(strName);
+                    if (localRef != IntPtr.Zero)
                     {
+#if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} class", strName));
+#endif
+                        _jcBitmap = AndroidJNI.NewGlobalRef(localRef);
+                        AndroidJNI.DeleteLocalRef(localRef);
                     }
                     else
                     {
@@ -109,13 +131,25 @@ namespace Android.Graphics
                         return;
                     }
                 }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError(string.Format("Exception loading JNI - {0}", ex));
+            }
+        }
 
+        private static void JNIFind()
+        {
+            try
+            {
                 {
                     string strMethod = "compress";
                     _jmCompress = AndroidJNI.GetMethodID(_jcBitmap, strMethod, "(Landroid/graphics/Bitmap$CompressFormat;ILjava/io/OutputStream;)Z");
                     if (_jmCompress != IntPtr.Zero)
                     {
+#if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} method", strMethod));
+#endif
                     }
                     else
                     {
@@ -130,8 +164,29 @@ namespace Android.Graphics
             }
         }
 
+        public Bitmap(IntPtr instance)
+        {
+            _instance = instance;
+        }
+
+        public IntPtr GetInstance()
+        {
+            return _instance;
+        }
+
+        public void Dispose()
+        {
+            if (_instance != IntPtr.Zero)
+            {
+                AndroidJNI.DeleteGlobalRef(_instance);
+                _instance = IntPtr.Zero;
+            }
+        }
+
         public void compress(Bitmap.CompressFormat format, int quality, ByteArrayOutputStream stream)
         {
+            JNIFind();
+
             if (_instance == IntPtr.Zero)
             {
                 Debug.LogError("_instance is not initialized");
@@ -142,13 +197,9 @@ namespace Android.Graphics
                 Debug.LogError("_jmCompress is not initialized");
                 return;
             }
-            AndroidJNI.CallVoidMethod(_instance, _jmCompress, new jvalue[] { new jvalue() { l = format.Instance }, new jvalue() { i = quality }, new jvalue() { l = stream.Instance } });
-        }
-
-        public IntPtr Instance
-        {
-            get { return _instance; }
-            set { _instance = value; }
+            AndroidJNI.CallVoidMethod(_instance, _jmCompress, new jvalue[] { new jvalue() { l = format.Instance }, new jvalue() { i = quality }, new jvalue() { l = stream.GetInstance() } });
         }
     }
 }
+
+#endif

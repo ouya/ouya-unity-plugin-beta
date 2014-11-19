@@ -1,4 +1,6 @@
-﻿using Android.Runtime;
+#if UNITY_ANDROID && !UNITY_EDITOR
+
+using Android.Runtime;
 using System;
 using UnityEngine;
 
@@ -15,7 +17,6 @@ namespace Android.Graphics.Drawables
 
         public static Drawable GetObject(IntPtr instance)
         {
-            if(Application.platform != RuntimePlatform.Android) return null;
             Drawable result = new Drawable();
             result._instance = instance;
             return result;
@@ -28,3 +29,5 @@ namespace Android.Graphics.Drawables
         }
     }
 }
+
+#endif

@@ -1,4 +1,6 @@
-﻿//#define VERBOSE_LOGGING
+#if UNITY_ANDROID && !UNITY_EDITOR
+
+//#define VERBOSE_LOGGING
 
 using System;
 #if VERBOSE_LOGGING
@@ -18,18 +20,18 @@ namespace tv.ouya.sdk
 
         static OuyaUnityActivity()
         {
-            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
                     string strName = "tv/ouya/sdk/OuyaUnityActivity";
-                    _jcOuyaUnityActivity = AndroidJNI.FindClass(strName);
-                    if (_jcOuyaUnityActivity != IntPtr.Zero)
+                    IntPtr localRef = AndroidJNI.FindClass(strName);
+                    if (localRef != IntPtr.Zero)
                     {
 #if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} class", strName));
 #endif
-                        _jcOuyaUnityActivity = AndroidJNI.NewGlobalRef(_jcOuyaUnityActivity);
+                        _jcOuyaUnityActivity = AndroidJNI.NewGlobalRef(localRef);
+                        AndroidJNI.DeleteLocalRef(localRef);
                     }
                     else
                     {
@@ -46,7 +48,6 @@ namespace tv.ouya.sdk
 
         private static void JNIFind()
         {
-            if(Application.platform != RuntimePlatform.Android) return;
             try
             {
                 {
@@ -99,7 +100,6 @@ namespace tv.ouya.sdk
 
         public void debugDisplayKeyDownElapsed()
         {
-            if(Application.platform != RuntimePlatform.Android) return;
 #if VERBOSE_LOGGING
             Debug.Log(MethodBase.GetCurrentMethod().Name);
 #endif
@@ -120,7 +120,6 @@ namespace tv.ouya.sdk
 
         public void debugDisplayKeyUpElapsed()
         {
-            if(Application.platform != RuntimePlatform.Android) return;
 #if VERBOSE_LOGGING
             Debug.Log(MethodBase.GetCurrentMethod().Name);
 #endif
@@ -141,3 +140,5 @@ namespace tv.ouya.sdk
 
     }
 }
+
+#endif
