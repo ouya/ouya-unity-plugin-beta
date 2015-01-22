@@ -736,8 +736,6 @@ public static class OuyaSDK
 
     #endregion
 
-#if UNITY_ANDROID && !UNITY_EDITOR
-
     #region Joystick Callibration Listeners
 
     public interface IJoystickCalibrationListener
@@ -1202,6 +1200,4 @@ public static class OuyaSDK
     }
 
     #endregion
-
-#endif
 }
